@@ -1,0 +1,17 @@
+system.reset_db
+system.random_seed -seed 12345
+vertex.property.define -property label -type String
+
+vertex.import -table nodes.csv -vertex_column vertex -columns label
+arc.property.define -property value -type Double
+arc.import -table edges.csv -source_column source -target_column target -columns value  
+vertex.cluster.weak_components
+vertex.drop -filter weak_components>1
+
+dashboard.new -version 2
+
+vertex.layout.force_directed
+dashboard.page.new -layout aaa
+dashboard.widget.data
+dashboard.widget.explore -coordinates x:y
+dashboard.save

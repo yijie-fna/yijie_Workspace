@@ -1,0 +1,4 @@
+outs:
+- md5: be4665e2990bfcb4ba440d5347a1eb90
+  size: 4963
+  path: gprops.csv

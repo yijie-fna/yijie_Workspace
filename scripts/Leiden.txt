@@ -1,0 +1,29 @@
+system.reset_db
+system.random_seed -seed 12345
+vertex.property.define -property label -type String
+
+vertex.import -table nodes.csv -vertex_column vertex -columns label
+arc.property.define -property value -type Double
+arc.import -table edges.csv -source_column source -target_column target -columns value  
+vertex.cluster.weak_components
+vertex.drop -filter weak_components>1
+vertex.cluster.leiden {
+   -iterations 1
+   -save_as first
+}
+vertex.cluster.leiden {
+   -iterations 10
+   -initial_membership first
+   -save_as second
+}
+
+dashboard.new -version 2
+
+vertex.layout.force_directed -cluster first:50000:5000
+dashboard.page.new -layout aaa
+# dashboard.widget.data
+dashboard.widget.explore -coordinates x:y
+dashboard.widget.mappings.vertex -color first
+dashboard.widget.explore -coordinates x:y
+dashboard.widget.mappings.vertex -color second
+dashboard.save
